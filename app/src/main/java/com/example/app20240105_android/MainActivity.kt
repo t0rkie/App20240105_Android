@@ -34,8 +34,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.app20240105_android.components.RecordView
 import com.example.app20240105_android.components.TimerView
 import com.example.app20240105_android.ui.theme.App20240105_AndroidTheme
+import dagger.hilt.android.AndroidEntryPoint
 
 data class BottomNavigationItem(
     val title: String,
@@ -46,6 +48,7 @@ data class BottomNavigationItem(
     val badgeCount: Int? = null
 )
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val timerViewModel by viewModels<TimerViewModel>()
 
@@ -100,20 +103,6 @@ fun MainContent(timerViewModel: TimerViewModel) {
     var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
     Scaffold(
-//        topBar = {
-//            CenterAlignedTopAppBar(
-//                title = { Text(text = "app bar") },
-//                navigationIcon = {
-//                    IconButton(onClick = { /*TODO*/ }) {
-//                        Icon(
-//                            imageVector = Icons.Filled.ArrowBack,
-//                            contentDescription = ""
-//                        )
-//                    }
-//                }
-//
-//            )
-//        },
         bottomBar = {
             NavigationBar {
                 items.forEachIndexed { index, item ->
@@ -147,13 +136,16 @@ fun MainContent(timerViewModel: TimerViewModel) {
             startDestination = items[selectedItemIndex].destination
         ) {
             composable("TimerView") {
-                TimerView(navController, timerViewModel)
+                TimerView(navController)
             }
             composable("ReportView") {
                 EmailPage("Chat", Modifier.padding(padding))
             }
             composable("AccountView") {
                 SettingPage("Settings", Modifier.padding(padding))
+            }
+            composable("RecordView") {
+                RecordView(navController)
             }
         }
 
@@ -168,7 +160,6 @@ fun Label(icon: ImageVector, text: String, color: Color = MaterialTheme.colorSch
             imageVector = icon,
             contentDescription = text
         )
-//        Spacer(modifier = Modifier.width(10.dp))
         Text(text = text, color = color, fontSize = 14.sp, fontWeight = FontWeight.Bold)
     }
 }
