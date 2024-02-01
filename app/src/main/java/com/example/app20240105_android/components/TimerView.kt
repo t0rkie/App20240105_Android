@@ -20,7 +20,10 @@ import com.example.app20240105_android.TimerViewModel
 
 
 @Composable
-fun TimerView(navController: NavController, timerViewModel: TimerViewModel = hiltViewModel()) {
+fun TimerView(
+    navController: NavController,
+    timerViewModel: TimerViewModel = hiltViewModel()
+) {
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, // 横方向
