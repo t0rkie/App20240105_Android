@@ -5,7 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 
+@HiltViewModel
 class TimerViewModel : ViewModel() {
     private var elapsedTime = mutableStateOf(0)
     private var timer by mutableStateOf(0)
