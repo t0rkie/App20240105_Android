@@ -164,15 +164,6 @@ fun Label(icon: ImageVector, text: String, color: Color = MaterialTheme.colorSch
     }
 }
 
-// 画面遷移するページを３つ作成
-@Composable
-fun HomePage(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
 @Composable
 fun EmailPage(name: String, modifier: Modifier = Modifier) {
     Text(
