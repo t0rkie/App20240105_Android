@@ -27,7 +27,7 @@ fun RecordItemRow(
 ) {
     Row(
         modifier = Modifier
-            .padding(start = 10.dp, end = 10.dp)
+            .padding(10.dp)
             .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween

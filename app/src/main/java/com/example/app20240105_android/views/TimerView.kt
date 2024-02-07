@@ -1,4 +1,4 @@
-package com.example.app20240105_android.components
+package com.example.app20240105_android.views
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

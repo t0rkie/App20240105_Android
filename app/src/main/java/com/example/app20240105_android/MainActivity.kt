@@ -8,12 +8,8 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -21,10 +17,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -34,9 +26,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.app20240105_android.components.RecordView
-import com.example.app20240105_android.components.StudyLogView
-import com.example.app20240105_android.components.TimerView
+import com.example.app20240105_android.views.RecordView
+import com.example.app20240105_android.views.StudyLogView
+import com.example.app20240105_android.views.TimerView
 import com.example.app20240105_android.ui.theme.App20240105_AndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -52,6 +44,7 @@ data class BottomNavigationItem(
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val timerViewModel by viewModels<TimerViewModel>()
+    private val mainViewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainContent(timerViewModel)
+                    MainContent(timerViewModel, mainViewModel)
                 }
             }
         }
@@ -72,7 +65,7 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainContent(timerViewModel: TimerViewModel) {
+fun MainContent(timerViewModel: TimerViewModel, mainViewModel: MainViewModel) {
     // navigationを追加
     val navController = rememberNavController()
 
@@ -82,6 +75,13 @@ fun MainContent(timerViewModel: TimerViewModel) {
             destination = "TimerView",
             selectedIcon = R.drawable.baseline_av_timer_24,
             unselectedIcon = R.drawable.baseline_av_timer_24,
+            hasNews = false,
+        ),
+        BottomNavigationItem(
+            title = "記録",
+            destination = "StudyLogView",
+            selectedIcon = R.drawable.baseline_text_snippet_24,
+            unselectedIcon = R.drawable.baseline_text_snippet_24,
             hasNews = false,
         ),
         BottomNavigationItem(
@@ -101,16 +101,16 @@ fun MainContent(timerViewModel: TimerViewModel) {
         ),
     )
     // 画面遷移の状態を扱う変数を追加
-    var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
+//    var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
     Scaffold(
         bottomBar = {
             NavigationBar {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
-                        selected = selectedItemIndex == index,
+                        selected = mainViewModel.selectedItemIndex == index,
                         onClick = {
-                            selectedItemIndex = index
+                            mainViewModel.selectedItemIndex = index
                             navController.navigate(item.destination)
                         },
                         label = { Text(text = item.title) },
@@ -118,7 +118,7 @@ fun MainContent(timerViewModel: TimerViewModel) {
                         icon = {
                             Icon(
                                 painterResource(
-                                    if (index == selectedItemIndex) {
+                                    if (index == mainViewModel.selectedItemIndex) {
                                         item.selectedIcon
                                     } else item.unselectedIcon
                                 ),
@@ -134,7 +134,7 @@ fun MainContent(timerViewModel: TimerViewModel) {
             padding ->
         NavHost(
             navController = navController,
-            startDestination = items[selectedItemIndex].destination
+            startDestination = items[mainViewModel.selectedItemIndex].destination
         ) {
             composable("TimerView") {
                 TimerView(navController)
