@@ -23,7 +23,7 @@ import com.example.app20240105_android.R
 fun RecordItemRow(
     icon: Int,
     title: String,
-    value: String
+    component: @Composable() () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -45,10 +45,11 @@ fun RecordItemRow(
                 color = Color(0xFF333333)
             )
         }
-        Text(
-            text = value,
-            modifier = Modifier.padding(end = 15.dp),
-            color = Color(0xFF333333)
-        )
+        component()
+//        Text(
+//            text = "value",
+//            modifier = Modifier.padding(end = 15.dp),
+//            color = Color(0xFF333333)
+//        )
     }
 }

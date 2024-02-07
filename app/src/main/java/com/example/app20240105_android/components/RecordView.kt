@@ -2,6 +2,7 @@ package com.example.app20240105_android.components
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,12 +24,15 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -113,9 +118,10 @@ fun RecordView(
 
             RecordItemRow(
                 icon = R.drawable.baseline_edit_note_24,
-                title = "科目",
-                value = "TOEIC900円"
-            )
+                title = "科目"
+            ) {
+                Demo_ExposedDropdownMenuBox()
+            }
 
             Row(
                 modifier = Modifier
@@ -145,9 +151,14 @@ fun RecordView(
 
             RecordItemRow(
                 icon = R.drawable.baseline_av_timer_24,
-                title = "勉強時間",
-                value = timerViewModel.timeFormatted
-            )
+                title = "勉強時間"
+            ) {
+                Text(
+                    text = timerViewModel.timeFormatted,
+                    modifier = Modifier.padding(end = 15.dp),
+                    color = Color(0xFF333333)
+                )
+            }
 
 
             // メモセクション
@@ -213,4 +224,48 @@ fun SectionHeader(title: String) {
         text = title,
         style = MaterialTheme.typography.titleMedium
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Demo_ExposedDropdownMenuBox() {
+    val context = LocalContext.current
+    val coffeeDrinks = arrayOf("Americano", "Cappuccino", "Espresso", "Latte", "Mocha")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(coffeeDrinks[0]) }
+
+    Box(
+        modifier = Modifier.padding(start = 10.dp),
+    ) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {
+                expanded = !expanded
+            }
+        ) {
+            TextField(
+                value = selectedText,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier.menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                coffeeDrinks.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(text = item) },
+                        onClick = {
+                            selectedText = item
+                            expanded = false
+                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            }
+        }
+    }
 }
