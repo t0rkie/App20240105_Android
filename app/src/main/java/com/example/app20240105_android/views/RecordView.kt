@@ -1,7 +1,6 @@
-package com.example.app20240105_android.components
+package com.example.app20240105_android.views
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -12,27 +11,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,13 +35,15 @@ import androidx.compose.ui.graphics.Color.Companion.LightGray
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.app20240105_android.MainViewModel
 import com.example.app20240105_android.R
 import com.example.app20240105_android.TimerViewModel
+import com.example.app20240105_android.components.DropdownMenuBox
+import com.example.app20240105_android.components.RecordItemRow
+import com.example.app20240105_android.components.RegisterModal
 
 // Subjectデータクラスの定義
 data class Subject(
@@ -77,13 +68,11 @@ val subjects = listOf(
 @Composable
 fun RecordView(
     navController: NavController,
-    timerViewModel: TimerViewModel = hiltViewModel()
+    timerViewModel: TimerViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel()
 ) {
 
     // 状態変数
-    var selectedSubjectId by remember { mutableStateOf(0) }
-    var showSheet by remember { mutableStateOf(false) }
-    var newSubjectName by remember { mutableStateOf("") }
     var memo by remember { mutableStateOf("") }
 
     Scaffold(
@@ -114,41 +103,7 @@ fun RecordView(
                     bottom = padding.calculateBottomPadding()
                 )
         ) {
-            // 科目選択セクション
-
-            RecordItemRow(
-                icon = R.drawable.baseline_edit_note_24,
-                title = "科目"
-            ) {
-                Demo_ExposedDropdownMenuBox()
-            }
-
-            Row(
-                modifier = Modifier
-                    .padding(start = 10.dp, end = 10.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                TextButton(onClick = { showSheet = true }) {
-                    Text(text = "科目を追加")
-                }
-            }
-
-            DropdownMenu(
-                expanded = showSheet,
-                onDismissRequest = { showSheet = false }
-            ) {
-                subjects.forEach { subject ->
-                    DropdownMenuItem(
-                        text = { Text(subject.subjectName) },
-                        onClick = {
-                            selectedSubjectId = subject.id
-                            showSheet = false
-                        }
-                    )
-                }
-            }
-
+            // 勉強時間
             RecordItemRow(
                 icon = R.drawable.baseline_av_timer_24,
                 title = "勉強時間"
@@ -158,6 +113,29 @@ fun RecordView(
                     modifier = Modifier.padding(end = 15.dp),
                     color = Color(0xFF333333)
                 )
+            }
+
+            // 科目選択セクション
+            RecordItemRow(
+                icon = R.drawable.baseline_edit_note_24,
+                title = "科目"
+            ) {
+                DropdownMenuBox()
+            }
+
+            Row(
+                modifier = Modifier
+                    .padding(start = 10.dp, end = 10.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                TextButton(onClick = { mainViewModel.isShowDialog = true }) {
+                    Text(text = "科目を追加")
+                }
+            }
+
+            if (mainViewModel.isShowDialog) {
+                RegisterModal()
             }
 
 
@@ -184,13 +162,15 @@ fun RecordView(
                 BasicTextField(
                     value = memo,
                     onValueChange = { memo = it },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .height(100.dp)
                     ,
 //                        .background(Color.Gray),
                     decorationBox = { innerTextField ->
                         Box(
-                            Modifier.padding(10.dp)
+                            Modifier
+                                .padding(10.dp)
                                 .clip(RectangleShape)
                                 .background(LightGray)
                         ) {
@@ -203,6 +183,8 @@ fun RecordView(
 
             Spacer(modifier = Modifier.height(200.dp))
 
+            val context = LocalContext.current
+
             Row(
                 modifier = Modifier
                     .padding(start = 10.dp, end = 10.dp)
@@ -210,60 +192,12 @@ fun RecordView(
                 horizontalArrangement = Arrangement.Center
             ) {
                 // 記録ボタン
-                Button(onClick = { /* 記録処理 */ }) {
+                Button(onClick = {
+                    mainViewModel.selectedItemIndex = 1 // FIXME: StudyLogViewのタブ番号
+                    navController.navigate("StudyLogView")
+                    Toast.makeText(context, "追加！", Toast.LENGTH_SHORT).show()
+                }) {
                     Text("記録する")
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun SectionHeader(title: String) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Demo_ExposedDropdownMenuBox() {
-    val context = LocalContext.current
-    val coffeeDrinks = arrayOf("Americano", "Cappuccino", "Espresso", "Latte", "Mocha")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(coffeeDrinks[0]) }
-
-    Box(
-        modifier = Modifier.padding(start = 10.dp),
-    ) {
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            }
-        ) {
-            TextField(
-                value = selectedText,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = Modifier.menuAnchor()
-            )
-
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                coffeeDrinks.forEach { item ->
-                    DropdownMenuItem(
-                        text = { Text(text = item) },
-                        onClick = {
-                            selectedText = item
-                            expanded = false
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
-                        }
-                    )
                 }
             }
         }

@@ -3,6 +3,7 @@ package com.example.app20240105_android
 import android.os.Looper
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,10 +12,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TimerViewModel @Inject constructor(): ViewModel() {
     private var elapsedTime = mutableStateOf(0)
-    private var timer by mutableStateOf(0)
     private val handler = android.os.Handler(Looper.getMainLooper())
     private lateinit var runnable: Runnable
-
     fun startTimer() {
         runnable = Runnable {
             elapsedTime.value++
