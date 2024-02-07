@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,6 +31,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -49,6 +51,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.app20240105_android.R
@@ -115,12 +118,11 @@ fun RecordView(
                 )
         ) {
             // 科目選択セクション
-
             RecordItemRow(
                 icon = R.drawable.baseline_edit_note_24,
                 title = "科目"
             ) {
-                Demo_ExposedDropdownMenuBox()
+                DropdownMenuBox()
             }
 
             Row(
@@ -136,7 +138,7 @@ fun RecordView(
 
             DropdownMenu(
                 expanded = showSheet,
-                onDismissRequest = { showSheet = false }
+                onDismissRequest = { showSheet = false },
             ) {
                 subjects.forEach { subject ->
                     DropdownMenuItem(
@@ -144,14 +146,26 @@ fun RecordView(
                         onClick = {
                             selectedSubjectId = subject.id
                             showSheet = false
-                        }
+                        },
                     )
                 }
             }
+            RegisterModal()
 
             RecordItemRow(
                 icon = R.drawable.baseline_av_timer_24,
                 title = "勉強時間"
+            ) {
+                Text(
+                    text = timerViewModel.timeFormatted,
+                    modifier = Modifier.padding(end = 15.dp),
+                    color = Color(0xFF333333)
+                )
+            }
+
+            RecordItemRow(
+                icon = R.drawable.baseline_text_snippet_24,
+                title = "教材"
             ) {
                 Text(
                     text = timerViewModel.timeFormatted,
@@ -184,13 +198,15 @@ fun RecordView(
                 BasicTextField(
                     value = memo,
                     onValueChange = { memo = it },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
                         .height(100.dp)
                     ,
 //                        .background(Color.Gray),
                     decorationBox = { innerTextField ->
                         Box(
-                            Modifier.padding(10.dp)
+                            Modifier
+                                .padding(10.dp)
                                 .clip(RectangleShape)
                                 .background(LightGray)
                         ) {
@@ -210,7 +226,7 @@ fun RecordView(
                 horizontalArrangement = Arrangement.Center
             ) {
                 // 記録ボタン
-                Button(onClick = { /* 記録処理 */ }) {
+                Button(onClick = { navController.navigate("StudyLogView") }) {
                     Text("記録する")
                 }
             }
@@ -228,14 +244,17 @@ fun SectionHeader(title: String) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Demo_ExposedDropdownMenuBox() {
+fun DropdownMenuBox() {
     val context = LocalContext.current
-    val coffeeDrinks = arrayOf("Americano", "Cappuccino", "Espresso", "Latte", "Mocha")
+    val subjects = arrayOf("TOEIC勉強", "ベース", "統計2級", "音楽理論", "アプリ開発")
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(coffeeDrinks[0]) }
+    var selectedText by remember { mutableStateOf(subjects[0]) }
 
     Box(
-        modifier = Modifier.padding(start = 10.dp),
+        modifier = Modifier
+            .padding(start = 10.dp)
+            .width(200.dp)
+        ,
     ) {
         ExposedDropdownMenuBox(
             expanded = expanded,
@@ -255,15 +274,58 @@ fun Demo_ExposedDropdownMenuBox() {
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                coffeeDrinks.forEach { item ->
+                subjects.forEach { item ->
                     DropdownMenuItem(
                         text = { Text(text = item) },
                         onClick = {
                             selectedText = item
                             expanded = false
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
                         }
                     )
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun RegisterModal() {
+    var textState by remember { mutableStateOf("") } // テキスト入力状態の保持
+    val openDialog = remember { mutableStateOf(false) } // ダイアログ表示状態の保持
+
+    // ダイアログを開くためのボタン
+    Button(onClick = { openDialog.value = true }) {
+        Text("登録モーダルを開く")
+    }
+
+    // ダイアログ表示
+    if (openDialog.value) {
+        Dialog(onDismissRequest = { openDialog.value = false }) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp)
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Text("データ登録")
+                    Spacer(modifier = Modifier.height(20.dp))
+                    // テキスト入力フィールド
+                    TextField(
+                        value = textState,
+                        onValueChange = { textState = it },
+                        label = { Text("入力してください") }
+                    )
+                    Spacer(modifier = Modifier.height(20.dp))
+                    // 登録ボタン
+                    Button(onClick = {
+                        // ここにデータ登録の処理を書く
+                        println("登録: $textState") // 仮の処理
+                        openDialog.value = false // ダイアログを閉じる
+                    }) {
+                        Text("登録")
+                    }
                 }
             }
         }

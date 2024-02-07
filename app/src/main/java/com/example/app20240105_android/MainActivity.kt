@@ -35,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.app20240105_android.components.RecordView
+import com.example.app20240105_android.components.StudyLogView
 import com.example.app20240105_android.components.TimerView
 import com.example.app20240105_android.ui.theme.App20240105_AndroidTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -146,6 +147,9 @@ fun MainContent(timerViewModel: TimerViewModel) {
             }
             composable("RecordView") {
                 RecordView(navController)
+            }
+            composable("StudyLogView") {
+                StudyLogView()
             }
         }
 
