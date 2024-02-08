@@ -5,11 +5,25 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,11 +31,18 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -93,10 +114,10 @@ fun MainContent(timerViewModel: TimerViewModel, mainViewModel: MainViewModel) {
             badgeCount = 45
         ),
         BottomNavigationItem(
-            title = "アカウント",
-            destination = "AccountView",
-            selectedIcon = R.drawable.baseline_account_circle_24,
-            unselectedIcon = R.drawable.baseline_account_circle_24,
+            title = "ホーム",
+            destination = "HomeView",
+            selectedIcon = R.drawable.baseline_home_24,
+            unselectedIcon = R.drawable.baseline_home_24,
             hasNews = true,
         ),
     )
@@ -140,10 +161,10 @@ fun MainContent(timerViewModel: TimerViewModel, mainViewModel: MainViewModel) {
                 TimerView(navController)
             }
             composable("ReportView") {
-                EmailPage("Chat", Modifier.padding(padding))
+                ReportView("Chat", Modifier.padding(padding))
             }
-            composable("AccountView") {
-                SettingPage("Settings", Modifier.padding(padding))
+            composable("HomeView") {
+                HomeView("Settings", Modifier.padding(padding))
             }
             composable("RecordView") {
                 RecordView(navController)
@@ -156,30 +177,83 @@ fun MainContent(timerViewModel: TimerViewModel, mainViewModel: MainViewModel) {
     }
 }
 
-
 @Composable
-fun Label(icon: ImageVector, text: String, color: Color = MaterialTheme.colorScheme.onBackground) {
-    Column() {
-        Icon(
-            imageVector = icon,
-            contentDescription = text
-        )
-        Text(text = text, color = color, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+fun ReportView(name: String, modifier: Modifier = Modifier) {
+    Text(
+        text = "Hello $name!",
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeView(name: String, modifier: Modifier = Modifier) {
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(text = "ホーム") },
+            )
+        },
+    ) {
+            padding ->
+        Column (
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(
+                    top = padding.calculateTopPadding(),
+                    bottom = padding.calculateBottomPadding()
+                )
+        ) {
+            ExpandableListSample()
+        }
     }
 }
 
 @Composable
-fun EmailPage(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun ExpandableCard(title: String, items: List<String>) {
+    var expanded by remember { mutableStateOf(false) }
+    val rotationAngle by animateFloatAsState(if (expanded) 90f else 0f, label = "")
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .clickable { expanded = !expanded }
+        ,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .graphicsLayer { rotationZ = rotationAngle }
+                ) {
+                    Icon(
+                        painterResource(R.drawable.baseline_keyboard_arrow_right_24),
+                        contentDescription = "arrow"
+                    )
+                    Spacer(modifier = Modifier.padding(end = 8.dp),)
+                }
+                Text(text = title)
+            }
+            if (expanded) {
+                Spacer(modifier = Modifier.height(8.dp))
+                items.forEach { item ->
+                    Text(text = item)
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
+            }
+        }
+    }
 }
 
 @Composable
-fun SettingPage(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun ExpandableListSample() {
+    val items = listOf("小アイテム1", "小アイテム2", "小アイテム3")
+    Column {
+        ExpandableCard(title = "科目", items = items)
+    }
 }
