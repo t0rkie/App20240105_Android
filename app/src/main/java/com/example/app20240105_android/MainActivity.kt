@@ -7,6 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
@@ -214,19 +216,21 @@ fun ExpandableCard(title: String, items: List<String>) {
     var expanded by remember { mutableStateOf(false) }
     val rotationAngle by animateFloatAsState(if (expanded) 90f else 0f, label = "")
 
-    Card(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .clickable { expanded = !expanded }
-        ,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
         Column(
             modifier = Modifier
                 .padding(8.dp)
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { expanded = !expanded },
+            ) {
                 Box(
                     modifier = Modifier
                         .graphicsLayer { rotationZ = rotationAngle }
@@ -237,13 +241,42 @@ fun ExpandableCard(title: String, items: List<String>) {
                     )
                     Spacer(modifier = Modifier.padding(end = 8.dp),)
                 }
-                Text(text = title)
+                Text(
+                    text = title,
+//                    modifier = Modifier.size(30.dp)
+                )
             }
+
             if (expanded) {
-                Spacer(modifier = Modifier.height(8.dp))
-                items.forEach { item ->
-                    Text(text = item)
-                    Spacer(modifier = Modifier.height(4.dp))
+
+                Row {
+                    Spacer(modifier = Modifier.padding(start = 40.dp))
+                    Column {
+                        items.forEach { item ->
+
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+                                Text(
+                                    text = item,
+                                )
+                                Icon(
+                                    painterResource(R.drawable.baseline_keyboard_arrow_right_24),
+                                    contentDescription = "arrow"
+                                )
+                            }
+
+                            Spacer(modifier = Modifier.height(4.dp))
+                        }
+
+                        Icon(
+                            painterResource(R.drawable.baseline_add_24),
+                            contentDescription = ""
+                        )
+                    }
                 }
             }
         }
@@ -252,7 +285,7 @@ fun ExpandableCard(title: String, items: List<String>) {
 
 @Composable
 fun ExpandableListSample() {
-    val items = listOf("小アイテム1", "小アイテム2", "小アイテム3")
+    val items = listOf("TOEIC900点", "ベース練習", "統計2級")
     Column {
         ExpandableCard(title = "科目", items = items)
     }
