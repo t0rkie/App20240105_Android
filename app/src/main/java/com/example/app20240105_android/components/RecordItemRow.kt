@@ -46,10 +46,5 @@ fun RecordItemRow(
             )
         }
         component()
-//        Text(
-//            text = "value",
-//            modifier = Modifier.padding(end = 15.dp),
-//            color = Color(0xFF333333)
-//        )
     }
 }

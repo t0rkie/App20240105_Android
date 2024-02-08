@@ -6,17 +6,22 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.app20240105_android.R
 import com.example.app20240105_android.TimerViewModel
+import com.example.app20240105_android.components.IconButton
 
 
 @Composable
@@ -32,7 +37,7 @@ fun TimerView(
         Spacer(modifier = Modifier.height(200.dp))
         Text(
             text = timerViewModel.timeFormatted,
-            fontSize = 60.sp
+            fontSize = 70.sp
         )
         Spacer(modifier = Modifier.height(50.dp))
 
@@ -41,17 +46,24 @@ fun TimerView(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
 
-            TextButton(onClick = { timerViewModel.startTimer() }) {
-                Text(text = "勉強開始")
-            }
+            IconButton(
+                icon = R.drawable.baseline_restore_24,
+                text = "リセット",
+                onClickFunction = { timerViewModel.resetTimer() }
+            )
 
-            TextButton(onClick = { timerViewModel.stopTimer() }) {
-                Text(text = "ストップ")
-            }
+            IconButton(
+                icon = R.drawable.baseline_play_arrow_24,
+                text = "スタート",
+                onClickFunction = { timerViewModel.startTimer() }
+            )
 
-            TextButton(onClick = { timerViewModel.resetTimer() }) {
-                Text(text = "リセット")
-            }
+            IconButton(
+                icon = R.drawable.baseline_stop_24,
+                text = "ストップ",
+                onClickFunction = { timerViewModel.stopTimer() }
+            )
+
         }
         Spacer(modifier = Modifier.height(50.dp))
 
