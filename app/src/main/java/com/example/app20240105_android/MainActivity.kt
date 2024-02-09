@@ -263,10 +263,16 @@ fun ExpandableCard(title: String, items: List<String>) {
                                 Text(
                                     text = item,
                                 )
-                                Icon(
-                                    painterResource(R.drawable.baseline_keyboard_arrow_right_24),
-                                    contentDescription = "arrow"
-                                )
+                                Row {
+                                    Icon(
+                                        painterResource(R.drawable.baseline_edit_24),
+                                        contentDescription = "arrow"
+                                    )
+                                    Icon(
+                                        painterResource(R.drawable.baseline_delete_24),
+                                        contentDescription = "arrow"
+                                    )
+                                }
                             }
 
                             Spacer(modifier = Modifier.height(4.dp))
