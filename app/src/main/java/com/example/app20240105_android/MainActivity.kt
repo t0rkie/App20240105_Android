@@ -25,7 +25,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -49,6 +48,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.app20240105_android.components.AccordionList
+import com.example.app20240105_android.components.IconButton
+import com.example.app20240105_android.components.RegisterModal
 import com.example.app20240105_android.views.RecordView
 import com.example.app20240105_android.views.StudyLogView
 import com.example.app20240105_android.views.TimerView
@@ -206,93 +208,8 @@ fun HomeView(name: String, modifier: Modifier = Modifier) {
                     bottom = padding.calculateBottomPadding()
                 )
         ) {
-            ExpandableListSample()
+            val items = listOf("TOEIC900点", "ベース練習", "統計2級")
+            AccordionList(title = "科目", items = items)
         }
-    }
-}
-
-@Composable
-fun ExpandableCard(title: String, items: List<String>) {
-    var expanded by remember { mutableStateOf(false) }
-    val rotationAngle by animateFloatAsState(if (expanded) 90f else 0f, label = "")
-
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(8.dp)
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { expanded = !expanded },
-            ) {
-                Box(
-                    modifier = Modifier
-                        .graphicsLayer { rotationZ = rotationAngle }
-                ) {
-                    Icon(
-                        painterResource(R.drawable.baseline_keyboard_arrow_right_24),
-                        contentDescription = "arrow"
-                    )
-                    Spacer(modifier = Modifier.padding(end = 8.dp),)
-                }
-                Text(
-                    text = title,
-//                    modifier = Modifier.size(30.dp)
-                )
-            }
-
-            if (expanded) {
-
-                Row {
-                    Spacer(modifier = Modifier.padding(start = 40.dp))
-                    Column {
-                        items.forEach { item ->
-
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically,
-                                horizontalArrangement = Arrangement.SpaceBetween
-                            ) {
-                                Text(
-                                    text = item,
-                                )
-                                Row {
-                                    Icon(
-                                        painterResource(R.drawable.baseline_edit_24),
-                                        contentDescription = "arrow"
-                                    )
-                                    Icon(
-                                        painterResource(R.drawable.baseline_delete_24),
-                                        contentDescription = "arrow"
-                                    )
-                                }
-                            }
-
-                            Spacer(modifier = Modifier.height(4.dp))
-                        }
-
-                        Icon(
-                            painterResource(R.drawable.baseline_add_24),
-                            contentDescription = ""
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun ExpandableListSample() {
-    val items = listOf("TOEIC900点", "ベース練習", "統計2級")
-    Column {
-        ExpandableCard(title = "科目", items = items)
     }
 }
