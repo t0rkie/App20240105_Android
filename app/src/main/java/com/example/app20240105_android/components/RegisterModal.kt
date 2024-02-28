@@ -19,8 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.app20240105_android.MainViewModel
-import com.example.app20240105_android.TimerViewModel
+import com.example.app20240105_android.models.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -4,6 +4,7 @@ plugins {
     kotlin("kapt")
     id("com.google.dagger.hilt.android")
     id ("io.realm.kotlin")
+
 }
 
 android {
@@ -77,9 +78,10 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+    implementation("androidx.compose.runtime:runtime-livedata:1.2.0-beta02")
 
     // Realm db
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
-    implementation("io.realm.kotlin:library-base:1.0.0")
+    implementation("io.realm.kotlin:library-base:1.11.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")
 
 }
