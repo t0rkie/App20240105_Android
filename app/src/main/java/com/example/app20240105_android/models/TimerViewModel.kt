@@ -1,10 +1,7 @@
-package com.example.app20240105_android
+package com.example.app20240105_android.models
 
 import android.os.Looper
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

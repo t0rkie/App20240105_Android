@@ -1,4 +1,4 @@
-package com.example.app20240105_android
+package com.example.app20240105_android.models
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue

@@ -38,12 +38,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.app20240105_android.MainViewModel
+import com.example.app20240105_android.models.MainViewModel
 import com.example.app20240105_android.R
-import com.example.app20240105_android.TimerViewModel
+import com.example.app20240105_android.StudyLog
+import com.example.app20240105_android.models.TimerViewModel
 import com.example.app20240105_android.components.DropdownMenuBox
 import com.example.app20240105_android.components.RecordItemRow
 import com.example.app20240105_android.components.RegisterModal
+import com.example.app20240105_android.models.StudyLogViewModel
 
 // Subjectデータクラスの定義
 data class Subject(
@@ -68,9 +70,11 @@ val subjects = listOf(
 @Composable
 fun RecordView(
     navController: NavController,
-    timerViewModel: TimerViewModel = hiltViewModel(),
-    mainViewModel: MainViewModel = hiltViewModel()
 ) {
+
+    val timerViewModel: TimerViewModel = hiltViewModel()
+    val mainViewModel: MainViewModel = hiltViewModel()
+    val studyLogViewModel: StudyLogViewModel = hiltViewModel()
 
     // 状態変数
     var memo by remember { mutableStateOf("") }
@@ -193,6 +197,10 @@ fun RecordView(
             ) {
                 // 記録ボタン
                 Button(onClick = {
+                    // 追加
+                    val log = StudyLog()
+                    studyLogViewModel.addLog(log)
+
                     mainViewModel.selectedItemIndex = 1 // FIXME: StudyLogViewのタブ番号
                     navController.navigate("StudyLogView")
                     Toast.makeText(context, "追加！", Toast.LENGTH_SHORT).show()
