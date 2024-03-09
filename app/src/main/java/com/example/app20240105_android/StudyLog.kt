@@ -7,10 +7,9 @@ import org.jetbrains.annotations.NotNull
 import java.util.UUID
 
 class StudyLog: RealmObject {
-    @Ignore
     @PrimaryKey
     @NotNull
-    var id: UUID = UUID.randomUUID()
+    var id: String = UUID.randomUUID().toString()
     var studyTime: Int = 0
     var studyTimeStr: String = "" // 00:00:00表記
     var subjectId: Int = 0 // 科目ID

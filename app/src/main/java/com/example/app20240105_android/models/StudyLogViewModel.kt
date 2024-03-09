@@ -1,5 +1,7 @@
 package com.example.app20240105_android.models
 
+import android.util.Log
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,10 +14,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StudyLogViewModel @Inject constructor(private val studyLogRepository: StudyLogRepository): ViewModel() {
-    private val _logs = MutableLiveData<List<StudyLog>>()
+    private val _logs = MutableLiveData<List<StudyLog>>(mutableListOf())
     val logs: LiveData<List<StudyLog>> = _logs
 
-    private fun refreshLogs() {
+    fun refreshLogs() {
         viewModelScope.launch {
             _logs.value = studyLogRepository.getAllStudyLog()
         }
