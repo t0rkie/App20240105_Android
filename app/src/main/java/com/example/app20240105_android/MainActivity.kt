@@ -2,6 +2,7 @@ package com.example.app20240105_android
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -19,13 +20,17 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Observer
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.app20240105_android.components.AccordionList
 import com.example.app20240105_android.models.MainViewModel
+import com.example.app20240105_android.models.StudyLogViewModel
 import com.example.app20240105_android.models.TimerViewModel
 import com.example.app20240105_android.views.RecordView
 import com.example.app20240105_android.views.StudyLogView
@@ -44,9 +49,6 @@ data class BottomNavigationItem(
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val timerViewModel by viewModels<TimerViewModel>()
-    private val mainViewModel by viewModels<MainViewModel>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -56,7 +58,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainContent(timerViewModel, mainViewModel)
+                    MainContent()
                 }
             }
         }
@@ -66,9 +68,18 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainContent(timerViewModel: TimerViewModel, mainViewModel: MainViewModel) {
+fun MainContent() {
+
+    val timerViewModel = hiltViewModel<TimerViewModel>()
+    val mainViewModel = hiltViewModel<MainViewModel>()
+    val studyLogViewModel = hiltViewModel<StudyLogViewModel>()
+
     // navigationを追加
     val navController = rememberNavController()
+
+    LaunchedEffect(Unit) {
+        studyLogViewModel.refreshLogs()
+    }
 
     val items = listOf(
         BottomNavigationItem(

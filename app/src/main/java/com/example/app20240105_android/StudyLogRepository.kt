@@ -1,5 +1,6 @@
 package com.example.app20240105_android
 
+import android.util.Log
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
@@ -21,9 +22,17 @@ class StudyLogRepository @Inject constructor() {
     }
 
     // Read
-    suspend fun getAllStudyLog(): RealmResults<StudyLog> {
+    fun getAllStudyLog(): List<StudyLog> {
         getRealmInstance().apply {
-            val studyLogs = query<StudyLog>().find()
+            val studyLogs = query<StudyLog>().find().map {
+                StudyLog().apply {
+                    id = it.id
+                    studyTime = it.studyTime
+                    studyTimeStr = it.studyTimeStr
+                    memo = it.memo
+                    subjectId = it.subjectId
+                }
+            }
             close()
             return studyLogs
         }
