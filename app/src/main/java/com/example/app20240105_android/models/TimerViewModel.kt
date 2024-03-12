@@ -11,7 +11,10 @@ class TimerViewModel @Inject constructor(): ViewModel() {
     private var elapsedTime = mutableStateOf(0)
     private val handler = android.os.Handler(Looper.getMainLooper())
     private lateinit var runnable: Runnable
+    private var isTimerRunning = mutableStateOf(false)
     fun startTimer() {
+        if (isTimerRunning.value) return
+        isTimerRunning.value = true
         runnable = Runnable {
             elapsedTime.value++
             // UI更新
@@ -21,7 +24,10 @@ class TimerViewModel @Inject constructor(): ViewModel() {
     }
 
     fun stopTimer() {
+        if (!isTimerRunning.value) return
+
         handler.removeCallbacks(runnable)
+        isTimerRunning.value = false
     }
 
     fun resetTimer() {

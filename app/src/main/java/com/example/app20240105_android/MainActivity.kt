@@ -149,7 +149,8 @@ fun MainContent() {
             startDestination = items[mainViewModel.selectedItemIndex].destination
         ) {
             composable("TimerView") {
-                TimerView(navController)
+                TimerView(timerViewModel, navController)
+//                TimerView(navController)
             }
             composable("ReportView") {
                 ReportView("Chat", Modifier.padding(padding))
@@ -158,7 +159,8 @@ fun MainContent() {
                 HomeView("Settings", Modifier.padding(padding))
             }
             composable("RecordView") {
-                RecordView(navController)
+                RecordView(timerViewModel, mainViewModel, navController)
+//                RecordView(navController)
             }
             composable("StudyLogView") {
                 StudyLogView()
