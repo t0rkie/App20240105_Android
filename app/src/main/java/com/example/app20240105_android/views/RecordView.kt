@@ -49,165 +49,155 @@ import com.example.app20240105_android.models.StudyLogViewModel
 
 // Subjectデータクラスの定義
 data class Subject(
-    val id: Int,
-    val subjectName: String
+  val id: Int,
+  val subjectName: String
 )
-
-// subjectsリストの初期化
-val subjects = listOf(
-    Subject(id = 1, subjectName = "TOEIC勉強"),
-    Subject(id = 2, subjectName = "ベース"),
-    Subject(id = 3, subjectName = "統計2級"),
-    Subject(id = 4, subjectName = "音楽理論"),
-    Subject(id = 5, subjectName = "副業"),
-    Subject(id = 6, subjectName = "アプリ開発"),
-    Subject(id = 7, subjectName = "絵の勉強"),
-    Subject(id = 8, subjectName = "読書")
-)
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecordView(
-    navController: NavController,
+  timerViewModel: TimerViewModel,
+  mainViewModel: MainViewModel,
+  navController: NavController,
 ) {
+//    val timerViewModel: TimerViewModel = hiltViewModel()
+//    val mainViewModel: MainViewModel = hiltViewModel()
+  val studyLogViewModel: StudyLogViewModel = hiltViewModel()
 
-    val timerViewModel: TimerViewModel = hiltViewModel()
-    val mainViewModel: MainViewModel = hiltViewModel()
-    val studyLogViewModel: StudyLogViewModel = hiltViewModel()
+  // 状態変数
+  var memo by remember { mutableStateOf("") }
 
-    // 状態変数
-    var memo by remember { mutableStateOf("") }
-
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                title = { Text(text = "記録する") },
-                navigationIcon = {
-                    if (navController.previousBackStackEntry != null) {
-                        IconButton(onClick = { navController.navigateUp() }) {
-                            Icon(
-                                imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = "Back"
-                            )
-                        }
-                    } else { null }
-                }
-            )
-        },
-    ) {
-            padding ->
-
-        Column(
-            horizontalAlignment = Alignment.Start, // 横方向
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(
-                    top = padding.calculateTopPadding(),
-                    bottom = padding.calculateBottomPadding()
-                )
-        ) {
-            // 勉強時間
-            RecordItemRow(
-                icon = R.drawable.baseline_av_timer_24,
-                title = "勉強時間"
-            ) {
-                Text(
-                    text = timerViewModel.timeFormatted,
-                    modifier = Modifier.padding(end = 15.dp),
-                    color = Color(0xFF333333)
-                )
+  Scaffold(
+    topBar = {
+      CenterAlignedTopAppBar(
+        title = { Text(text = "記録する") },
+        navigationIcon = {
+          if (navController.previousBackStackEntry != null) {
+            IconButton(onClick = { navController.navigateUp() }) {
+              Icon(
+                imageVector = Icons.Filled.ArrowBack,
+                contentDescription = "Back"
+              )
             }
-
-            // 科目選択セクション
-            RecordItemRow(
-                icon = R.drawable.baseline_edit_note_24,
-                title = "科目"
-            ) {
-                DropdownMenuBox()
-            }
-
-            Row(
-                modifier = Modifier
-                    .padding(start = 10.dp, end = 10.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                TextButton(onClick = { mainViewModel.isShowDialog = true }) {
-                    Text(text = "科目を追加")
-                }
-            }
-
-            if (mainViewModel.isShowDialog) {
-                RegisterModal()
-            }
-
-
-            // メモセクション
-            Column(
-                modifier = Modifier
-                    .padding(start = 10.dp, end = 10.dp, top = 10.dp)
-                    .fillMaxWidth(),
-                horizontalAlignment = Alignment.Start
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painterResource(R.drawable.baseline_edit_note_24),
-                        contentDescription = "勉強時間"
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 10.dp),
-                        text = "メモ",
-                        color = Color(0xFF333333)
-                    )
-                }
-                BasicTextField(
-                    value = memo,
-                    onValueChange = { memo = it },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(100.dp)
-                    ,
-//                        .background(Color.Gray),
-                    decorationBox = { innerTextField ->
-                        Box(
-                            Modifier
-                                .padding(10.dp)
-                                .clip(RectangleShape)
-                                .background(LightGray)
-                        ) {
-                            innerTextField()
-                        }
-                    }
-                )
-            }
-
-
-            Spacer(modifier = Modifier.height(200.dp))
-
-            val context = LocalContext.current
-
-            Row(
-                modifier = Modifier
-                    .padding(start = 10.dp, end = 10.dp)
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                // 記録ボタン
-                Button(onClick = {
-                    // 追加
-                    val log = StudyLog()
-                    studyLogViewModel.addLog(log)
-
-                    mainViewModel.selectedItemIndex = 1 // FIXME: StudyLogViewのタブ番号
-                    navController.navigate("StudyLogView")
-                    Toast.makeText(context, "追加！", Toast.LENGTH_SHORT).show()
-                }) {
-                    Text("記録する")
-                }
-            }
+          } else { null }
         }
+      )
+    },
+  ) {
+      padding ->
+
+    Column(
+      horizontalAlignment = Alignment.Start, // 横方向
+      modifier = Modifier
+        .fillMaxWidth()
+        .padding(
+          top = padding.calculateTopPadding(),
+          bottom = padding.calculateBottomPadding()
+        )
+    ) {
+      // 勉強時間
+      RecordItemRow(
+        icon = R.drawable.baseline_av_timer_24,
+        title = "勉強時間"
+      ) {
+        Text(
+          text = timerViewModel.timeFormatted,
+          modifier = Modifier.padding(end = 15.dp),
+          color = Color(0xFF333333)
+        )
+      }
+
+      // 科目選択セクション
+      RecordItemRow(
+        icon = R.drawable.baseline_edit_note_24,
+        title = "科目"
+      ) {
+        DropdownMenuBox()
+      }
+
+      Row(
+        modifier = Modifier
+          .padding(start = 10.dp, end = 10.dp)
+          .fillMaxWidth(),
+        horizontalArrangement = Arrangement.End
+      ) {
+        TextButton(onClick = { mainViewModel.isShowDialog = true }) {
+          Text(text = "科目を追加")
+        }
+      }
+
+      if (mainViewModel.isShowDialog) {
+        RegisterModal()
+      }
+
+
+      // メモセクション
+      Column(
+        modifier = Modifier
+          .padding(start = 10.dp, end = 10.dp, top = 10.dp)
+          .fillMaxWidth(),
+        horizontalAlignment = Alignment.Start
+      ) {
+        Row(
+          verticalAlignment = Alignment.CenterVertically
+        ) {
+          Icon(
+            painterResource(R.drawable.baseline_edit_note_24),
+            contentDescription = "勉強時間"
+          )
+          Text(
+            modifier = Modifier.padding(start = 10.dp),
+            text = "メモ",
+            color = Color(0xFF333333)
+          )
+        }
+        BasicTextField(
+          value = memo,
+          onValueChange = { memo = it },
+          modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp)
+          ,
+//                        .background(Color.Gray),
+          decorationBox = { innerTextField ->
+            Box(
+              Modifier
+                .padding(10.dp)
+                .clip(RectangleShape)
+                .background(LightGray)
+            ) {
+              innerTextField()
+            }
+          }
+        )
+      }
+
+
+      Spacer(modifier = Modifier.height(200.dp))
+
+      val context = LocalContext.current
+
+      Row(
+        modifier = Modifier
+          .padding(start = 10.dp, end = 10.dp)
+          .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+      ) {
+        // 記録ボタン
+        Button(onClick = {
+          // TODO: 入力された値を登録するよう修正
+          val log = StudyLog()
+          log.studyTimeStr = timerViewModel.timeFormatted
+
+          studyLogViewModel.addLog(log)
+
+          mainViewModel.selectedItemIndex = 1 // FIXME: StudyLogViewのタブ番号
+          navController.navigate("StudyLogView")
+          Toast.makeText(context, "追加！", Toast.LENGTH_SHORT).show()
+        }) {
+          Text("記録する")
+        }
+      }
     }
+  }
 }

@@ -22,9 +22,12 @@ import com.example.app20240105_android.components.IconButton
 
 @Composable
 fun TimerView(
-    navController: NavController,
-    timerViewModel: TimerViewModel = hiltViewModel()
+    timerViewModel: TimerViewModel,
+    navController: NavController
 ) {
+
+    // TODO: hiltでViewModelを共通化
+//    val timerViewModel: TimerViewModel = hiltViewModel()
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally, // 横方向
@@ -65,6 +68,7 @@ fun TimerView(
 
         Button(
             onClick = {
+                timerViewModel.stopTimer()
                 navController.navigate("RecordView")
             }
         ) {
