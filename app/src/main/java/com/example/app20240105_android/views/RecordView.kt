@@ -38,14 +38,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.app20240105_android.models.MainViewModel
+import com.example.app20240105_android.viewModel.MainViewModel
 import com.example.app20240105_android.R
-import com.example.app20240105_android.StudyLog
-import com.example.app20240105_android.models.TimerViewModel
+import com.example.app20240105_android.models.StudyLog
+import com.example.app20240105_android.viewModel.TimerViewModel
 import com.example.app20240105_android.components.DropdownMenuBox
 import com.example.app20240105_android.components.RecordItemRow
 import com.example.app20240105_android.components.RegisterModal
-import com.example.app20240105_android.models.StudyLogViewModel
+import com.example.app20240105_android.viewModel.StudyLogViewModel
 
 // Subjectデータクラスの定義
 data class Subject(
@@ -56,12 +56,13 @@ data class Subject(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecordView(
-  timerViewModel: TimerViewModel,
-  mainViewModel: MainViewModel,
   navController: NavController,
+//  timerViewModel: TimerViewModel = hiltViewModel(),
+//  mainViewModel: MainViewModel = hiltViewModel(),
+  timerViewModel: TimerViewModel,
+  mainViewModel: MainViewModel
 ) {
-//    val timerViewModel: TimerViewModel = hiltViewModel()
-//    val mainViewModel: MainViewModel = hiltViewModel()
+
   val studyLogViewModel: StudyLogViewModel = hiltViewModel()
 
   // 状態変数

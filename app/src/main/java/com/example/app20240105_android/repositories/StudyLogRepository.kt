@@ -1,10 +1,9 @@
-package com.example.app20240105_android
+package com.example.app20240105_android.repositories
 
-import android.util.Log
+import com.example.app20240105_android.models.StudyLog
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
-import io.realm.kotlin.query.RealmResults
 import javax.inject.Inject
 
 class StudyLogRepository @Inject constructor() {

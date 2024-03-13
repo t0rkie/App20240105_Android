@@ -1,6 +1,5 @@
 package com.example.app20240105_android.views
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -26,9 +25,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.app20240105_android.StudyLog
-import com.example.app20240105_android.StudyLogRepository
-import com.example.app20240105_android.models.StudyLogViewModel
+import com.example.app20240105_android.models.StudyLog
+import com.example.app20240105_android.viewModel.StudyLogViewModel
 
 @Composable
 fun StudyLogView() {

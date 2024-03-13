@@ -1,4 +1,4 @@
-package com.example.app20240105_android.models
+package com.example.app20240105_android.viewModel
 
 import android.os.Looper
 import androidx.compose.runtime.mutableStateOf
