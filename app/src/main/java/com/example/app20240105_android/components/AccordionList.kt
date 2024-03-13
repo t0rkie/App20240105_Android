@@ -23,7 +23,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.app20240105_android.models.MainViewModel
+import com.example.app20240105_android.viewModel.MainViewModel
 import com.example.app20240105_android.R
 
 @Composable

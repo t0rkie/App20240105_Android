@@ -2,10 +2,8 @@ package com.example.app20240105_android
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,14 +22,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Observer
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.app20240105_android.components.AccordionList
-import com.example.app20240105_android.models.MainViewModel
-import com.example.app20240105_android.models.StudyLogViewModel
-import com.example.app20240105_android.models.TimerViewModel
+import com.example.app20240105_android.viewModel.MainViewModel
+import com.example.app20240105_android.viewModel.StudyLogViewModel
+import com.example.app20240105_android.viewModel.TimerViewModel
 import com.example.app20240105_android.views.RecordView
 import com.example.app20240105_android.views.StudyLogView
 import com.example.app20240105_android.views.TimerView
@@ -68,11 +65,11 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainContent() {
-
-    val timerViewModel = hiltViewModel<TimerViewModel>()
-    val mainViewModel = hiltViewModel<MainViewModel>()
-    val studyLogViewModel = hiltViewModel<StudyLogViewModel>()
+fun MainContent(
+    timerViewModel: TimerViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel(),
+    studyLogViewModel: StudyLogViewModel = hiltViewModel()
+) {
 
     // navigationを追加
     val navController = rememberNavController()
@@ -149,7 +146,7 @@ fun MainContent() {
             startDestination = items[mainViewModel.selectedItemIndex].destination
         ) {
             composable("TimerView") {
-                TimerView(timerViewModel, navController)
+                TimerView(navController, timerViewModel)
 //                TimerView(navController)
             }
             composable("ReportView") {
@@ -159,7 +156,7 @@ fun MainContent() {
                 HomeView("Settings", Modifier.padding(padding))
             }
             composable("RecordView") {
-                RecordView(timerViewModel, mainViewModel, navController)
+                RecordView(navController, timerViewModel, mainViewModel)
 //                RecordView(navController)
             }
             composable("StudyLogView") {

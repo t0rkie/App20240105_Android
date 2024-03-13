@@ -1,4 +1,4 @@
-package com.example.app20240105_android
+package com.example.app20240105_android.models
 
 import io.realm.kotlin.types.RealmObject
 import io.realm.kotlin.types.annotations.Ignore

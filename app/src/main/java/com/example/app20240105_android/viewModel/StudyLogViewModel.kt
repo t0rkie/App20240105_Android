@@ -1,13 +1,11 @@
-package com.example.app20240105_android.models
+package com.example.app20240105_android.viewModel
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.app20240105_android.StudyLog
-import com.example.app20240105_android.StudyLogRepository
+import com.example.app20240105_android.models.StudyLog
+import com.example.app20240105_android.repositories.StudyLogRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
