@@ -1,6 +1,7 @@
 package com.example.app20240105_android.repositories
 
 import com.example.app20240105_android.models.StudyLog
+import com.example.app20240105_android.models.Subject
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
 import io.realm.kotlin.ext.query
@@ -29,7 +30,7 @@ class StudyLogRepository @Inject constructor() {
                     studyTime = it.studyTime
                     studyTimeStr = it.studyTimeStr
                     memo = it.memo
-                    subjectId = it.subjectId
+                    subject = it.subject
                 }
             }
             close()
@@ -44,7 +45,7 @@ class StudyLogRepository @Inject constructor() {
                 query<StudyLog>("id == $0", studyLog.id).find().first().apply {
                     studyTime = studyLog.studyTime
                     studyTimeStr = studyLog.studyTimeStr
-                    subjectId = studyLog.subjectId
+                    subject = studyLog.subject
                     memo = studyLog.memo
                 }
             }

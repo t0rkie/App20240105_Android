@@ -56,7 +56,7 @@ fun StudyLogRow(log: StudyLog) {
             elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
         ) {
             Column {
-                Text(text = log.subjectId.toString()) // TODO: 科目名を表示
+                Text(text = log.subject.toString()) // TODO: 科目名を表示
 
                 Row(
                     modifier = Modifier
