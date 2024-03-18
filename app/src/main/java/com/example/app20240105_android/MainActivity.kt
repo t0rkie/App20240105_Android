@@ -19,6 +19,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -33,7 +35,9 @@ import com.example.app20240105_android.views.RecordView
 import com.example.app20240105_android.views.StudyLogView
 import com.example.app20240105_android.views.TimerView
 import com.example.app20240105_android.ui.theme.App20240105_AndroidTheme
+import com.example.app20240105_android.viewModel.SubjectViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import androidx.compose.runtime.LaunchedEffect
 
 data class BottomNavigationItem(
     val title: String,
@@ -178,6 +182,10 @@ fun ReportView(name: String, modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeView(name: String, modifier: Modifier = Modifier) {
+    val subjectViewModel = hiltViewModel<SubjectViewModel>()
+    LaunchedEffect(Unit) { subjectViewModel.refreshSubjects() }
+    val subjects by subjectViewModel.subjects.observeAsState()
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -194,8 +202,8 @@ fun HomeView(name: String, modifier: Modifier = Modifier) {
                     bottom = padding.calculateBottomPadding()
                 )
         ) {
-            val items = listOf("TOEIC900点", "ベース練習", "統計2級")
-            AccordionList(title = "科目", items = items)
+//            val items = listOf("TOEIC900点", "ベース練習", "統計2級")
+            AccordionList(title = "科目", items = subjects)
         }
     }
 }

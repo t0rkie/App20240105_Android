@@ -25,11 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.app20240105_android.viewModel.MainViewModel
 import com.example.app20240105_android.R
+import com.example.app20240105_android.models.Subject
 
 @Composable
 fun AccordionList(
     title: String,
-    items: List<String>,
+    items: List<Subject>?,
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -71,7 +72,7 @@ fun AccordionList(
                 Row {
                     Spacer(modifier = Modifier.padding(start = 40.dp))
                     Column {
-                        items.forEach { item ->
+                        items?.forEach { item ->
 
                             Row(
                                 modifier = Modifier
@@ -80,7 +81,8 @@ fun AccordionList(
                                 horizontalArrangement = Arrangement.SpaceBetween
                             ) {
                                 Text(
-                                    text = item,
+                                    // FIXME!!
+                                    text = item.subjectName,
                                 )
                                 Row {
                                     Icon(
@@ -97,6 +99,7 @@ fun AccordionList(
                             Spacer(modifier = Modifier.height(4.dp))
                         }
 
+                        // 追加ボタン
                         Icon(
                             painterResource(R.drawable.baseline_add_24),
                             contentDescription = "",
@@ -114,10 +117,10 @@ fun AccordionList(
     }
 }
 
-@Composable
-fun ExpandableListSample() {
-    val items = listOf("TOEIC900点", "ベース練習", "統計2級")
-    Column {
-        AccordionList(title = "科目", items = items)
-    }
-}
+//@Composable
+//fun ExpandableListSample() {
+//    val items = listOf("TOEIC900点", "ベース練習", "統計2級")
+//    Column {
+//        AccordionList(title = "科目", items = items)
+//    }
+//}
