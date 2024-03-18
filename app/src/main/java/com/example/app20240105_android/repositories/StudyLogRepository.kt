@@ -10,7 +10,11 @@ import javax.inject.Inject
 class StudyLogRepository @Inject constructor() {
     // 参考: https://note.com/masato1230/n/n84f17dc95ce5
     private fun getRealmInstance(): Realm {
-        val config = RealmConfiguration.Builder(schema = setOf(StudyLog::class))
+        val config = RealmConfiguration
+            .Builder(schema = setOf(
+                StudyLog::class,
+                Subject::class
+            ))
             .build()
         return Realm.open(config)
     }
