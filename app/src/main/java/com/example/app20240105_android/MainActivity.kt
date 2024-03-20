@@ -160,8 +160,8 @@ fun MainContent(
                 HomeView("Settings", Modifier.padding(padding))
             }
             composable("RecordView") {
-                RecordView(navController, timerViewModel, mainViewModel)
-//                RecordView(navController)
+//                RecordView(navController, timerViewModel, mainViewModel)
+                RecordView(navController)
             }
             composable("StudyLogView") {
                 StudyLogView()
@@ -202,7 +202,6 @@ fun HomeView(name: String, modifier: Modifier = Modifier) {
                     bottom = padding.calculateBottomPadding()
                 )
         ) {
-//            val items = listOf("TOEIC900点", "ベース練習", "統計2級")
             AccordionList(title = "科目", items = subjects)
         }
     }

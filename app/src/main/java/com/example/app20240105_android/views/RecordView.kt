@@ -57,10 +57,10 @@ data class Subject(
 @Composable
 fun RecordView(
   navController: NavController,
-//  timerViewModel: TimerViewModel = hiltViewModel(),
-//  mainViewModel: MainViewModel = hiltViewModel(),
-  timerViewModel: TimerViewModel,
-  mainViewModel: MainViewModel
+  timerViewModel: TimerViewModel = hiltViewModel(), // 動いてない → time formattedが表示されない
+  mainViewModel: MainViewModel = hiltViewModel(), // こっちは動いている
+//  timerViewModel: TimerViewModel,
+//  mainViewModel: MainViewModel
 ) {
 
   val studyLogViewModel: StudyLogViewModel = hiltViewModel()
@@ -186,13 +186,12 @@ fun RecordView(
       ) {
         // 記録ボタン
         Button(onClick = {
-          // TODO: 入力された値を登録するよう修正
           val log = StudyLog()
           log.studyTimeStr = timerViewModel.timeFormatted
-
+//          log.subject = selectedSubject
           studyLogViewModel.addLog(log)
 
-          mainViewModel.selectedItemIndex = 1 // FIXME: StudyLogViewのタブ番号
+          mainViewModel.selectedItemIndex = 1 // FIXME!! 画面遷移が動いてない
           navController.navigate("StudyLogView")
           Toast.makeText(context, "追加！", Toast.LENGTH_SHORT).show()
         }) {

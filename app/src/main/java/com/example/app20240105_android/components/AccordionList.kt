@@ -26,11 +26,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.app20240105_android.viewModel.MainViewModel
 import com.example.app20240105_android.R
 import com.example.app20240105_android.models.Subject
+import com.example.app20240105_android.viewModel.SubjectViewModel
 
 @Composable
 fun AccordionList(
     title: String,
     items: List<Subject>?,
+    subjectViewModel: SubjectViewModel = hiltViewModel(), // 動いてる
     mainViewModel: MainViewModel = hiltViewModel()
 ) {
     var expanded by remember { mutableStateOf(false) }
@@ -87,11 +89,17 @@ fun AccordionList(
                                 Row {
                                     Icon(
                                         painterResource(R.drawable.baseline_edit_24),
-                                        contentDescription = "arrow"
+                                        contentDescription = "edit",
+                                        Modifier.clickable {
+                                            // TODO
+                                        }
                                     )
                                     Icon(
                                         painterResource(R.drawable.baseline_delete_24),
-                                        contentDescription = "arrow"
+                                        contentDescription = "delete",
+                                        Modifier.clickable {
+                                            subjectViewModel.deleteSubject(item)
+                                        }
                                     )
                                 }
                             }

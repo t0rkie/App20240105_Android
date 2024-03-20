@@ -26,7 +26,7 @@ import com.example.app20240105_android.viewModel.SubjectViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterModal(
-    mainViewModel: MainViewModel = hiltViewModel(),
+    mainViewModel: MainViewModel = hiltViewModel(), // このhiltViewModelは動いている？
     subjectViewModel: SubjectViewModel = hiltViewModel()
 ) {
     var textState by remember { mutableStateOf("") } // テキスト入力状態の保持
@@ -50,7 +50,7 @@ fun RegisterModal(
                 // 登録ボタン
                 Button(onClick = {
                     if (textState.isEmpty()) return@Button
-                    // ここにデータ登録の処理を書く
+                    // ここにデータ登録の処理を書くs
                     val subject = Subject()
                     subject.subjectName = textState
                     subjectViewModel.addSubject(subject)

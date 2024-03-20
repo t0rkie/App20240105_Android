@@ -21,19 +21,21 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.app20240105_android.viewModel.SubjectViewModel
+import com.example.app20240105_android.viewModel.TimerViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropdownMenuBox() {
+fun DropdownMenuBox(
+    timerViewModel: TimerViewModel = hiltViewModel()
+) {
     val context = LocalContext.current
-//    val subjects = arrayOf("TOEIC勉強", "ベース", "統計2級", "音楽理論", "アプリ開発")
     val subjectViewModel = hiltViewModel<SubjectViewModel>()
     LaunchedEffect(Unit) { subjectViewModel.refreshSubjects() }
     val subjects by subjectViewModel.subjects.observeAsState()
 
-
     var expanded by remember { mutableStateOf(false) }
 //    var selectedText by remember { mutableStateOf(subjects?.get(0)?.subjectName ?: "") }
+    var selectedSubject by remember { mutableStateOf(null) }
 
     Box(
         modifier = Modifier
@@ -49,7 +51,7 @@ fun DropdownMenuBox() {
         ) {
             Box {
                 TextField(
-                    value = "選択してください",
+                    value = "選択してください",  // FIXME!! 選択した科目を表示する
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -66,6 +68,7 @@ fun DropdownMenuBox() {
                         text = { Text(text = item.subjectName) },
                         onClick = {
 //                            selectedText = item.subjectName
+                            timerViewModel.selectedSubject =  mutableStateOf(item) // FIXME!! 登録できてない
                             expanded = false
 //                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
                         }
