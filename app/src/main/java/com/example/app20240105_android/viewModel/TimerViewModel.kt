@@ -3,6 +3,7 @@ package com.example.app20240105_android.viewModel
 import android.os.Looper
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.app20240105_android.models.Subject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -12,6 +13,9 @@ class TimerViewModel @Inject constructor(): ViewModel() {
     private val handler = android.os.Handler(Looper.getMainLooper())
     private lateinit var runnable: Runnable
     private var isTimerRunning = mutableStateOf(false)
+
+    // 選択された科目
+    var selectedSubject = mutableStateOf(Subject())
     fun startTimer() {
         if (isTimerRunning.value) return
         isTimerRunning.value = true

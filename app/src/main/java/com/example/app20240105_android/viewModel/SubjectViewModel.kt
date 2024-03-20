@@ -27,4 +27,11 @@ class SubjectViewModel @Inject constructor(private val subjectRepository: Subjec
             refreshSubjects()
         }
     }
+
+    fun deleteSubject(subject: Subject) {
+        viewModelScope.launch {
+            subjectRepository.deleteSubject(subject)
+            refreshSubjects()
+        }
+    }
 }

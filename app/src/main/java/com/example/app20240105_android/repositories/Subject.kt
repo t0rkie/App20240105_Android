@@ -33,4 +33,12 @@ class SubjectRepository @Inject constructor() {
             return subjects
         }
     }
+
+    suspend fun deleteSubject(subject: Subject) {
+        getRealmInstance().apply {
+            write {
+                delete(query<Subject>("id == $0", subject.id).find().first())
+            }
+        }.close()
+    }
 }
