@@ -1,6 +1,7 @@
 package com.example.app20240105_android.views
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -187,8 +188,10 @@ fun RecordView(
         // 記録ボタン
         Button(onClick = {
           val log = StudyLog()
+          if (timerViewModel.selectedSubject.value.subjectName.isNullOrBlank()) return@Button
+
           log.studyTimeStr = timerViewModel.timeFormatted
-//          log.subject = selectedSubject
+          log.subject = timerViewModel.selectedSubject.value
           studyLogViewModel.addLog(log)
 
           mainViewModel.selectedItemIndex = 1 // FIXME!! 画面遷移が動いてない

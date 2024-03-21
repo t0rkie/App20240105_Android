@@ -1,5 +1,6 @@
 package com.example.app20240105_android.views
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.app20240105_android.models.StudyLog
 import com.example.app20240105_android.viewModel.StudyLogViewModel
+import io.realm.kotlin.ext.isValid
 
 @Composable
 fun StudyLogView() {
@@ -47,6 +49,7 @@ fun StudyLogView() {
 fun StudyLogRow(log: StudyLog) {
     val studyLogViewModel = hiltViewModel<StudyLogViewModel>()
     val context = LocalContext.current
+
     Column {
         Text(text = "2024年1月5日")
         Card(
@@ -56,7 +59,9 @@ fun StudyLogRow(log: StudyLog) {
             elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
         ) {
             Column {
-                Text(text = log.subject.toString()) // TODO: 科目名を表示
+                log.subject?.let {
+                    if (it.isValid()) { Text(text = it.subjectName) }
+                }
 
                 Row(
                     modifier = Modifier
