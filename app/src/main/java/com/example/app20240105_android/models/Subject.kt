@@ -10,5 +10,4 @@ class Subject: RealmObject {
     @NotNull
     var id: String = UUID.randomUUID().toString()
     var subjectName: String = ""
-
 }

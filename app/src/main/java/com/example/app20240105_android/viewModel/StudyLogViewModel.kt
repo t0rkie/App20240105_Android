@@ -23,12 +23,6 @@ class StudyLogViewModel @Inject constructor(private val studyLogRepository: Stud
 
     fun addLog(log: StudyLog) {
         viewModelScope.launch {
-            // TODO
-//            val log = StudyLog()
-//            log.studyTime = 60
-//            log.studyTimeStr = "00:10:00"
-//            log.memo = "test"
-//            log.subjectId = 1
             studyLogRepository.createStudyLog(log)
             refreshLogs()
         }

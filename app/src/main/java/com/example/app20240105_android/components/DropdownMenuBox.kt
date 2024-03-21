@@ -34,8 +34,9 @@ fun DropdownMenuBox(
     val subjects by subjectViewModel.subjects.observeAsState()
 
     var expanded by remember { mutableStateOf(false) }
-//    var selectedText by remember { mutableStateOf(subjects?.get(0)?.subjectName ?: "") }
-    var selectedSubject by remember { mutableStateOf(null) }
+
+    // Stateの変更を監視してUIを再構築
+    var selectedSubject by timerViewModel.selectedSubject
 
     Box(
         modifier = Modifier
@@ -51,7 +52,7 @@ fun DropdownMenuBox(
         ) {
             Box {
                 TextField(
-                    value = "選択してください",  // FIXME!! 選択した科目を表示する
+                    value =  if (selectedSubject.subjectName.isEmpty()) { "選択してください" } else { selectedSubject.subjectName },
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },

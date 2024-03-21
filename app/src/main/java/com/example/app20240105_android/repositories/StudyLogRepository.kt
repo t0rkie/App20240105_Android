@@ -1,10 +1,13 @@
 package com.example.app20240105_android.repositories
 
+import android.util.Log
 import com.example.app20240105_android.models.StudyLog
 import com.example.app20240105_android.models.Subject
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.ext.isValid
 import io.realm.kotlin.ext.query
+import java.lang.IllegalStateException
 import javax.inject.Inject
 
 class StudyLogRepository @Inject constructor() {
@@ -21,7 +24,17 @@ class StudyLogRepository @Inject constructor() {
     // Create
     suspend fun createStudyLog(studyLog: StudyLog) {
         getRealmInstance().apply {
-            write { copyToRealm(studyLog) }
+            write {
+                val subjectId = studyLog.subject?.id ?: throw  IllegalArgumentException("Subject ID is null")
+                val existingSubject = query<Subject>("id == $0", subjectId).first().find()
+                existingSubject?.let {
+                    if (it.isValid()) {
+                        studyLog.subject = it
+                        copyToRealm(studyLog)
+                    }
+                    throw IllegalStateException("The subject object is not valid.")
+                } ?: throw IllegalStateException("Subject with ID $subjectId not found")
+            }
         }.close()
     }
 
