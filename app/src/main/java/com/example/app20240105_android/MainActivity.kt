@@ -42,8 +42,7 @@ import androidx.compose.runtime.LaunchedEffect
 data class BottomNavigationItem(
     val title: String,
     val destination: String,
-    val selectedIcon: Int,
-    val unselectedIcon: Int,
+    val icon: Int,
     val hasNews: Boolean,
     val badgeCount: Int? = null
 )
@@ -69,14 +68,15 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainContent(
-    timerViewModel: TimerViewModel = hiltViewModel(),
-    mainViewModel: MainViewModel = hiltViewModel(),
-    studyLogViewModel: StudyLogViewModel = hiltViewModel()
-) {
+fun MainContent() {
+
+    val timerViewModel = hiltViewModel<TimerViewModel>()
+    val mainViewModel = hiltViewModel<MainViewModel>()
+    val studyLogViewModel = hiltViewModel<StudyLogViewModel>()
 
     // navigationを追加
     val navController = rememberNavController()
+    val pageIndex by mainViewModel.pageIndex.observeAsState()
 
     LaunchedEffect(Unit) {
         studyLogViewModel.refreshLogs()
@@ -86,55 +86,45 @@ fun MainContent(
         BottomNavigationItem(
             title = "タイマー",
             destination = "TimerView",
-            selectedIcon = R.drawable.baseline_av_timer_24,
-            unselectedIcon = R.drawable.baseline_av_timer_24,
+            icon = R.drawable.baseline_av_timer_24,
             hasNews = false,
         ),
         BottomNavigationItem(
             title = "記録",
             destination = "StudyLogView",
-            selectedIcon = R.drawable.baseline_text_snippet_24,
-            unselectedIcon = R.drawable.baseline_text_snippet_24,
+            icon = R.drawable.baseline_text_snippet_24,
             hasNews = false,
         ),
         BottomNavigationItem(
             title = "レポート",
             destination = "ReportView",
-            selectedIcon = R.drawable.baseline_bar_chart_24,
-            unselectedIcon = R.drawable.baseline_bar_chart_24,
+            icon = R.drawable.baseline_bar_chart_24,
             hasNews = false,
             badgeCount = 45
         ),
         BottomNavigationItem(
             title = "ホーム",
             destination = "HomeView",
-            selectedIcon = R.drawable.baseline_home_24,
-            unselectedIcon = R.drawable.baseline_home_24,
+            icon = R.drawable.baseline_home_24,
             hasNews = true,
         ),
     )
-    // 画面遷移の状態を扱う変数を追加
-//    var selectedItemIndex by rememberSaveable { mutableStateOf(0) }
 
     Scaffold(
         bottomBar = {
             NavigationBar {
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
-                        selected = mainViewModel.selectedItemIndex == index,
+                        selected = index == pageIndex,
                         onClick = {
-                            mainViewModel.selectedItemIndex = index
+                            mainViewModel.updatePageIndex(index)
                             navController.navigate(item.destination)
                         },
                         label = { Text(text = item.title) },
                         alwaysShowLabel = true,
                         icon = {
                             Icon(
-                                painterResource(
-                                    if (index == mainViewModel.selectedItemIndex) {
-                                        item.selectedIcon
-                                    } else item.unselectedIcon
-                                ),
+                                painterResource(item.icon),
                                 contentDescription = item.title
                             )
                         }
@@ -147,7 +137,7 @@ fun MainContent(
             padding ->
         NavHost(
             navController = navController,
-            startDestination = items[mainViewModel.selectedItemIndex].destination
+            startDestination = items[pageIndex ?: 0].destination
         ) {
             composable("TimerView") {
                 TimerView(navController, timerViewModel)

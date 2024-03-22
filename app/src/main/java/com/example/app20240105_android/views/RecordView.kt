@@ -60,11 +60,10 @@ fun RecordView(
   navController: NavController,
   timerViewModel: TimerViewModel = hiltViewModel(), // 動いてない → time formattedが表示されない
   mainViewModel: MainViewModel = hiltViewModel(), // こっちは動いている
+  studyLogViewModel: StudyLogViewModel = hiltViewModel()
 //  timerViewModel: TimerViewModel,
 //  mainViewModel: MainViewModel
 ) {
-
-  val studyLogViewModel: StudyLogViewModel = hiltViewModel()
 
   // 状態変数
   var memo by remember { mutableStateOf("") }
@@ -194,7 +193,7 @@ fun RecordView(
           log.subject = timerViewModel.selectedSubject.value
           studyLogViewModel.addLog(log)
 
-          mainViewModel.selectedItemIndex = 1 // FIXME!! 画面遷移が動いてない
+          mainViewModel.updatePageIndex(1)
           navController.navigate("StudyLogView")
           Toast.makeText(context, "追加！", Toast.LENGTH_SHORT).show()
         }) {
