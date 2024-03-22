@@ -31,8 +31,9 @@ class StudyLogRepository @Inject constructor() {
                     if (it.isValid()) {
                         studyLog.subject = it
                         copyToRealm(studyLog)
+                    } else {
+                        throw IllegalStateException("The subject object is not valid.")
                     }
-                    throw IllegalStateException("The subject object is not valid.")
                 } ?: throw IllegalStateException("Subject with ID $subjectId not found")
             }
         }.close()
