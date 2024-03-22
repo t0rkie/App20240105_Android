@@ -21,7 +21,6 @@ class StudyLogRepository @Inject constructor() {
             .build()
         return Realm.open(config)
     }
-    // Create
     suspend fun createStudyLog(studyLog: StudyLog) {
         getRealmInstance().apply {
             write {
@@ -42,17 +41,19 @@ class StudyLogRepository @Inject constructor() {
     // Read
     fun getAllStudyLog(): List<StudyLog> {
         getRealmInstance().apply {
-            val studyLogs = query<StudyLog>().find().map {
-                StudyLog().apply {
-                    id = it.id
-                    studyTime = it.studyTime
-                    studyTimeStr = it.studyTimeStr
-                    memo = it.memo
-                    subject = it.subject
-                }
+            val studyLog = query<StudyLog>().find().map {
+                copyFromRealm(it)
+                // Subjectオブジェクトは別スレッドで使用しているため以下のコードでは取得できない
+//                StudyLog().apply {
+//                    id = it.id
+//                    studyTime = it.studyTime
+//                    studyTimeStr = it.studyTimeStr
+//                    memo = it.memo
+//                    subject = it.subject
+//                }
             }
             close()
-            return studyLogs
+            return studyLog
         }
     }
 
