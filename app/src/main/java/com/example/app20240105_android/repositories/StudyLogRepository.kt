@@ -43,14 +43,6 @@ class StudyLogRepository @Inject constructor() {
         getRealmInstance().apply {
             val studyLog = query<StudyLog>().find().map {
                 copyFromRealm(it)
-                // Subjectオブジェクトは別スレッドで使用しているため以下のコードでは取得できない
-//                StudyLog().apply {
-//                    id = it.id
-//                    studyTime = it.studyTime
-//                    studyTimeStr = it.studyTimeStr
-//                    memo = it.memo
-//                    subject = it.subject
-//                }
             }
             close()
             return studyLog
