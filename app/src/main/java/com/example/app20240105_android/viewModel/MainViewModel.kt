@@ -1,5 +1,6 @@
 package com.example.app20240105_android.viewModel
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +12,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(): ViewModel() {
+    init {
+        Log.d("MainViewModel", "ViewModel initialized")
+    }
     var isShowDialog by mutableStateOf(false)
 
     private val _pageIndex = MutableLiveData(0)

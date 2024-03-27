@@ -116,7 +116,7 @@ fun AccordionList(
                         )
 
                         if (mainViewModel.isShowDialog) {
-                            RegisterModal()
+                            RegisterModal(mainViewModel)
                         }
                     }
                 }
