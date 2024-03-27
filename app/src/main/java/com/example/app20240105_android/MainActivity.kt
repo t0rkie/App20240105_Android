@@ -147,11 +147,11 @@ fun MainContent() {
                 ReportView("Chat", Modifier.padding(padding))
             }
             composable("HomeView") {
-                HomeView("Settings", Modifier.padding(padding))
+                HomeView()
             }
             composable("RecordView") {
-//                RecordView(navController, timerViewModel, mainViewModel)
-                RecordView(navController)
+                RecordView(navController, mainViewModel, timerViewModel)
+//                RecordView(navController)
             }
             composable("StudyLogView") {
                 StudyLogView()
@@ -171,7 +171,7 @@ fun ReportView(name: String, modifier: Modifier = Modifier) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeView(name: String, modifier: Modifier = Modifier) {
+fun HomeView() {
     val subjectViewModel = hiltViewModel<SubjectViewModel>()
     LaunchedEffect(Unit) { subjectViewModel.refreshSubjects() }
     val subjects by subjectViewModel.subjects.observeAsState()

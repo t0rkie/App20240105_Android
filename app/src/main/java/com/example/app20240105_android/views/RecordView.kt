@@ -48,21 +48,17 @@ import com.example.app20240105_android.components.RecordItemRow
 import com.example.app20240105_android.components.RegisterModal
 import com.example.app20240105_android.viewModel.StudyLogViewModel
 
-// Subjectデータクラスの定義
-data class Subject(
-  val id: Int,
-  val subjectName: String
-)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RecordView(
   navController: NavController,
-  timerViewModel: TimerViewModel = hiltViewModel(), // 動いてない → time formattedが表示されない
-  mainViewModel: MainViewModel = hiltViewModel(), // こっちは動いている
+//  mainViewModel: MainViewModel = hiltViewModel(),
+//  timerViewModel: TimerViewModel = hiltViewModel(),
+//  studyLogViewModel: StudyLogViewModel = hiltViewModel()
+  mainViewModel: MainViewModel,
+  timerViewModel: TimerViewModel,
   studyLogViewModel: StudyLogViewModel = hiltViewModel()
-//  timerViewModel: TimerViewModel,
-//  mainViewModel: MainViewModel
 ) {
 
   // 状態変数
@@ -113,7 +109,7 @@ fun RecordView(
         icon = R.drawable.baseline_edit_note_24,
         title = "科目"
       ) {
-        DropdownMenuBox()
+        DropdownMenuBox(timerViewModel)
       }
 
       Row(
@@ -128,7 +124,7 @@ fun RecordView(
       }
 
       if (mainViewModel.isShowDialog) {
-        RegisterModal()
+        RegisterModal(mainViewModel)
       }
 
 

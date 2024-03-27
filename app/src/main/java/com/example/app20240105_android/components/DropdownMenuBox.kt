@@ -26,7 +26,8 @@ import com.example.app20240105_android.viewModel.TimerViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DropdownMenuBox(
-    timerViewModel: TimerViewModel = hiltViewModel()
+//    timerViewModel: TimerViewModel = hiltViewModel()
+    timerViewModel: TimerViewModel
 ) {
     val context = LocalContext.current
     val subjectViewModel = hiltViewModel<SubjectViewModel>()
@@ -68,10 +69,9 @@ fun DropdownMenuBox(
                     DropdownMenuItem(
                         text = { Text(text = item.subjectName) },
                         onClick = {
-//                            selectedText = item.subjectName
-                            timerViewModel.selectedSubject =  mutableStateOf(item) // FIXME!! 登録できてない
+                            timerViewModel.selectedSubject =  mutableStateOf(item)
                             expanded = false
-//                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+//                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()å
                         }
                     )
                 }
